@@ -1,0 +1,237 @@
+/* Importando uma fonte do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* Estilos gerais e paleta de cores (Tema Escuro) */
+:root {
+    --primary-color: #0d0d0d; /* Um preto um pouco mais suave */
+    --secondary-color: #c5a47e;
+    --background-color: #121212; /* Fundo principal escuro */
+    --text-color: #e0e0e0; /* Cor de texto clara */
+    --surface-color: #1e1e1e; /* Cor para as 'caixas' e seções */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    scroll-behavior: smooth; /* Para rolagem suave ao clicar nos links */
+    line-height: 1.6;
+}
+
+/* Cabeçalho e Navegação */
+header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1.5em 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+nav ul li a:hover {
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Seção de Início (Hero) */
+#inicio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 60vh; /* Altura maior para a seção de herói */
+    padding: 40px 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/3998419/pexels-photo-3998419.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+    background-size: cover;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+#inicio h2 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+#inicio p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+/* Conteúdo Principal */
+main {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 40px auto 0;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+section {
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+h2 {
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--secondary-color);
+    margin: 8px auto 0;
+}
+
+/* Lista de Serviços */
+.service-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.service-list li {
+    background-color: var(--surface-color);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #282828;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Botão genérico */
+.button {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 12px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1em;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #d4b996; /* Um tom mais claro do dourado */
+    transform: translateY(-2px);
+}
+
+/* Nova Seção de Chamada para Ação (CTA) */
+.cta-section {
+    background-color: var(--surface-color);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    margin: 40px auto;
+    max-width: 1000px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Formulário */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="password"] {
+    background-color: #2a2a2a;
+    color: var(--text-color);
+    border: 1px solid #444;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+form input:focus {
+    outline: none;
+    border-color: var(--secondary-color); 
+}
+
+form button {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+form button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    margin-top: 40px;
+}
