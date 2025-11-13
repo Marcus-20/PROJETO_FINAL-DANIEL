@@ -1,1 +1,8 @@
 # PROJETO_FINAL-DANIEL
+
+Nossa ideia é um melhoramento de um projeto passado de uma barbearia, onde tinha apenas front e agora iremos adicionar back-end e banco de dados para duas funções: cliente, marca horário
+integrantes:
+
+-Marcus Vinicius dos santos costa
+-Lucas oliveira correia
+-Carlos costa de Souza júnior
