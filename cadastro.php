@@ -9,26 +9,42 @@ $servicos = [
     "Limpeza de Pele Masculina"
 ];
 
+$mensagem = ""; // Variável para exibir mensagens de sucesso ou erro
+
 // Verifica se o formulário foi enviado via método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Coleta os dados do formulário
+    // --- Conexão com o Banco de Dados ---
+    $servername = "127.0.0.1";
+    $username = "root"; // Usuário padrão do XAMPP
+    $password = ""; // Senha padrão do XAMPP é vazia
+    $dbname = "barbearia"; // O banco de dados que você criou
+
+    // Cria a conexão
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Verifica a conexão
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
+    }
+
+    // Coleta e limpa os dados do formulário
     $nome = htmlspecialchars($_POST['nome']);
     $email = htmlspecialchars($_POST['email']);
     $telefone = htmlspecialchars($_POST['telefone']);
-    $servico_selecionado = htmlspecialchars($_POST['servico']); // Captura o serviço selecionado
+    $servico_selecionado = htmlspecialchars($_POST['servico']);
 
-    // Aqui você faria a conexão com o banco de dados e salvaria os dados.
-    // Por exemplo:
-    // $conn = new mysqli("localhost", "usuario", "senha", "banco_de_dados");
-    // if ($conn->connect_error) { die("Conexão falhou: " . $conn->connect_error); }
-    // $stmt = $conn->prepare("INSERT INTO agendamentos (nome, email, telefone, servico) VALUES (?, ?, ?, ?)");
-    // $stmt->bind_param("ssss", $nome, $email, $telefone, $servico_selecionado);
-    // $stmt->execute();
-    // $stmt->close();
-    // $conn->close();
+    // Prepara e executa a inserção no banco
+    $stmt = $conn->prepare("INSERT INTO cadastros (nome, email, telefone, servico) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $nome, $email, $telefone, $servico_selecionado);
 
-    // Para demonstração, exibe os dados recebidos, incluindo o serviço
-    echo "<script>alert('Cadastro recebido!\\nNome: $nome\\nE-mail: $email\\nServiço: $servico_selecionado');</script>";
+    if ($stmt->execute()) {
+        $mensagem = "Cadastro realizado com sucesso!";
+    } else {
+        $mensagem = "Erro ao realizar o cadastro: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
 <!DOCTYPE html>
@@ -46,8 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav>
             <ul>
                 <li><a href="index.html">Início</a></li>
+                <li><a href="historico_agendamentos.php">Histórico</a></li>
                 <li><a href="servicos.php">Serviços</a></li>
                 <li><a href="cadastro.php">Cadastro</a></li>
+                <li><a href="clientes.php">Clientes</a></li>
+                <li><a href="agendamento.php">Agendamento</a></li>
             </ul>
         </nav>
     </header>
@@ -55,6 +74,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <section id="cadastro">
             <h2>Crie sua Conta</h2>
+
+            <?php if (!empty($mensagem)): ?>
+                <div class="mensagem-sucesso" style="text-align: center; padding: 10px; margin-bottom: 20px; background-color: #d4edda; color: #155724; border-radius: 5px;">
+                    <p><?php echo $mensagem; ?></p>
+                </div>
+            <?php endif; ?>
+
             <form action="cadastro.php" method="POST"> <!-- O 'action' agora aponta para este próprio arquivo PHP -->
                 <label for="nome">Nome Completo:</label>
                 <input type="text" id="nome" name="nome" required>
