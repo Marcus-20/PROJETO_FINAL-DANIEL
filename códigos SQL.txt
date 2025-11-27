@@ -1,0 +1,18 @@
+códigos SQL
+
+CREATE TABLE cadastros (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20)
+);
+
+
+CREATE TABLE agendamentos (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    primeiro_nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    servico VARCHAR(255) NOT NULL,
+    horario VARCHAR(20) NOT NULL,
+    data_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
