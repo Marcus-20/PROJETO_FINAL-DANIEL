@@ -58,22 +58,33 @@ $servicos = [
 <section id="servicos">
     <h2>Nossos Serviços</h2>
 
-    <ul class="service-list">
+    <div class="service-container">
+        <?php
+        // Divide o array de serviços em dois pedaços de 3
+        $servicos_chunks = array_chunk($servicos, 3, true);
+        ?>
 
-        <?php foreach ($servicos as $titulo => $opcoes): ?>
-            <li>
-                <details class="details">
-                    <summary class="summary"><?= $titulo ?></summary>
-                    <ul>
-                        <?php foreach ($opcoes as $item): ?>
-                            <li><?= $item ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </details>
-            </li>
+        <?php foreach ($servicos_chunks as $chunk): ?>
+            <ul class="service-list">
+                <?php foreach ($chunk as $titulo => $opcoes): ?>
+                    <li>
+                        <h3 class="summary"><?= $titulo ?></h3>
+                        <ul>
+                            <?php foreach ($opcoes as $item): ?>
+                                <li><?= $item ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         <?php endforeach; ?>
+    </div>
 
-    </ul>
+    <div class="call-to-action">
+    <center>    
+    <a href="cadastro.php" class="button">Gostaria de solicitar um serviço?</a>
+    </center>
+    </div>
 </section>
 
 </body>
