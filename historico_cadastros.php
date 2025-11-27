@@ -16,7 +16,7 @@ if (isset($_GET['acao']) && $_GET['acao'] == 'excluir' && isset($_GET['id'])) {
         $stmt->close();
         $conn_delete->close();
         // Redireciona para a mesma página sem os parâmetros GET para evitar re-exclusão ao recarregar
-        header("Location: clientes.php");
+        header("Location: historico_cadastros.php");
         exit();
     }
 }
@@ -43,7 +43,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes - Barbearia Elegance</title>
+    <title>Histórico de Cadastros - Barbearia Elegance</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -70,10 +70,9 @@ $conn->close();
         <nav>
             <ul>
                 <li><a href="index.html">Início</a></li>
-                <li><a href="historico_agendamentos.php">Histórico</a></li>
                 <li><a href="servicos.php">Serviços</a></li>
                 <li><a href="cadastro.php">Cadastro</a></li>
-                <li><a href="clientes.php">Clientes</a></li>
+                <li><a href="historico_cadastros.php">Histórico de Clientes</a></li>
                 <li><a href="agendamento.php">Agendamento</a></li>
             </ul>
         </nav>
@@ -81,7 +80,7 @@ $conn->close();
 
     <main>
         <section id="historico">
-            <h2>Clientes Cadastrados</h2>
+            <h2>Histórico de Cadastros</h2>
 
             <?php if (!empty($mensagem_sucesso)): ?>
                 <div class="mensagem-sucesso" style="margin-bottom: 20px;">
@@ -111,7 +110,7 @@ $conn->close();
                                 <td><?= date("d/m/Y H:i:s", strtotime($row["data_cadastro"])) ?></td>
                                 <td class="action-links">
                                     <a href="editar_cadastro.php?id=<?= $row['id'] ?>" class="button-edit">Alterar</a>
-                                    <a href="clientes.php?acao=excluir&id=<?= $row['id'] ?>" class="button-delete" onclick="return confirm('Tem certeza que deseja excluir este cadastro?');">Excluir</a>
+                                    <a href="historico_cadastros.php?acao=excluir&id=<?= $row['id'] ?>" class="button-delete" onclick="return confirm('Tem certeza que deseja excluir este cadastro?');">Excluir</a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
