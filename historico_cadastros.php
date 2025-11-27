@@ -1,103 +1,132 @@
 <?php
-require_once "config.php";
+// --- Conexão com o Banco de Dados ---
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
+$dbname = "barbearia";
 
-// Consulta ao banco
-$sql = "SELECT id, nome, email, telefone, data_cadastro FROM usuarios ORDER BY data_cadastro DESC";
+// --- Lógica para Exclusão ---
+if (isset($_GET['acao']) && $_GET['acao'] == 'excluir' && isset($_GET['id'])) {
+    $conn_delete = new mysqli($servername, $username, $password, $dbname);
+    if (!$conn_delete->connect_error) {
+        $id_para_excluir = intval($_GET['id']);
+        $stmt = $conn_delete->prepare("DELETE FROM cadastros WHERE id = ?");
+        $stmt->bind_param("i", $id_para_excluir);
+        $stmt->execute();
+        $stmt->close();
+        $conn_delete->close();
+        // Redireciona para a mesma página sem os parâmetros GET para evitar re-exclusão ao recarregar
+        header("Location: clientes.php");
+        exit();
+    }
+}
+
+$mensagem_sucesso = "";
+if (isset($_GET['status']) && $_GET['status'] == 'sucesso') {
+    $mensagem_sucesso = "Cadastro atualizado com sucesso!";
+}
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
+}
+
+// --- Busca dos dados ---
+$sql = "SELECT id, nome, email, telefone, servico, data_cadastro FROM cadastros ORDER BY data_cadastro DESC";
 $result = $conn->query($sql);
-?>
 
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Histórico de Cadastros</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Barbearia Elegance</title>
     <link rel="stylesheet" href="style.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        .container {
-            width: 80%;
-            margin: 40px auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
+        /* Estilos para os botões de ação na tabela */
+        .button-edit {
+            background-color: #e0a800; /* Amarelo mais escuro */
+            color: #212529; /* Cor de texto escura para contraste */
         }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
+        .button-edit:hover {
+            background-color: #c79500; /* Amarelo ainda mais escuro no hover */
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+        .button-delete {
+            background-color: #5a6268; /* Cinza mais escuro */
+            color: #fff;
         }
-
-        table th {
-            background: #007bff;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover {
-            background: #f1f1f1;
-        }
-
-        .voltar {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            background: #007bff;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 6px;
-        }
-
-        .voltar:hover {
-            background: #0056b3;
+        .button-delete:hover {
+            background-color: #495057; /* Cinza ainda mais escuro no hover */
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Barbearia Elegance</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="historico_agendamentos.php">Histórico</a></li>
+                <li><a href="servicos.php">Serviços</a></li>
+                <li><a href="cadastro.php">Cadastro</a></li>
+                <li><a href="clientes.php">Clientes</a></li>
+                <li><a href="agendamento.php">Agendamento</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<div class="container">
-    <h1>Histórico de Cadastros</h1>
+    <main>
+        <section id="historico">
+            <h2>Clientes Cadastrados</h2>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Data do Cadastro</th>
-        </tr>
+            <?php if (!empty($mensagem_sucesso)): ?>
+                <div class="mensagem-sucesso" style="margin-bottom: 20px;">
+                    <p><?= $mensagem_sucesso ?></p>
+                </div>
+            <?php endif; ?>
 
-        <?php
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$row['id']}</td>
-                        <td>{$row['nome']}</td>
-                        <td>{$row['email']}</td>
-                        <td>{$row['telefone']}</td>
-                        <td>" . date('d/m/Y H:i', strtotime($row['data_cadastro'])) . "</td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='5'>Nenhum cadastro encontrado.</td></tr>";
-        }
-        ?>
-    </table>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Serviço</th>
+                        <th>Data do Cadastro</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row["nome"]) ?></td>
+                                <td><?= htmlspecialchars($row["email"]) ?></td>
+                                <td><?= htmlspecialchars($row["telefone"]) ?></td>
+                                <td><?= htmlspecialchars($row["servico"]) ?></td>
+                                <td><?= date("d/m/Y H:i:s", strtotime($row["data_cadastro"])) ?></td>
+                                <td class="action-links">
+                                    <a href="editar_cadastro.php?id=<?= $row['id'] ?>" class="button-edit">Alterar</a>
+                                    <a href="clientes.php?acao=excluir&id=<?= $row['id'] ?>" class="button-delete" onclick="return confirm('Tem certeza que deseja excluir este cadastro?');">Excluir</a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" style="text-align:center;">Nenhum cadastro encontrado.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </section>
+    </main>
 
-    <a class="voltar" href="index.html">Voltar ao Início</a>
-</div>
-
+    <footer>
+        <p>&copy; 2025 Barbearia Elegance. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
