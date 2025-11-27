@@ -11,15 +11,35 @@ $servicos = [
 
 // Verifica se o formulário foi enviado via método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Coleta os dados do formulário
-    $primeiro_nome = htmlspecialchars($_POST['primeiro_nome']);
+    // Coleta e limpa os dados do formulário
+    $nome = htmlspecialchars($_POST['primeiro_nome']);
     $email = htmlspecialchars($_POST['email']);
     $servico = htmlspecialchars($_POST['servico']);
     $horario = htmlspecialchars($_POST['horario']);
 
-    // Aqui você poderia adicionar o código para salvar os dados em um banco de dados
+    // --- Conexão com o Banco de Dados ---
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "barbearia";
 
-    $mensagem = "Obrigado por agendar, {$primeiro_nome}! Recebemos seu pedido para o serviço '{$servico}' às {$horario}.";
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
+    }
+
+    // Prepara a instrução SQL
+    $stmt = $conn->prepare("INSERT INTO agendamentos (nome, email, servico, horario) VALUES (?, ?, ?, ?)");
+    // Verifica se a preparação falhou
+    if ($stmt === false) {
+        die("Erro ao preparar a consulta: " . $conn->error);
+    }
+    $stmt->bind_param("ssss", $nome, $email, $servico, $horario);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    $mensagem = "Obrigado por agendar, {$nome}! Seu horário para '{$servico}' às {$horario} foi recebido com sucesso.";
 }
 ?>
 <!DOCTYPE html>
@@ -39,8 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav>
             <ul>
                 <li><a href="index.html">Início</a></li>
+                <li><a href="historico_agendamentos.php">Histórico</a></li>
                 <li><a href="servicos.php">Serviços</a></li>
                 <li><a href="cadastro.php">Cadastro</a></li>
+                <li><a href="clientes.php">Clientes</a></li>
                 <li><a href="agendamento.php">Agendamento</a></li>
             </ul>
         </nav>
