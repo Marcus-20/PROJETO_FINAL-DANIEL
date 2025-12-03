@@ -59,11 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav>
             <ul>
                 <li><a href="index.html">Início</a></li>
-                <li><a href="historico_agendamentos.php">Histórico</a></li>
                 <li><a href="servicos.php">Serviços</a></li>
                 <li><a href="cadastro.php">Cadastro</a></li>
                 <li><a href="clientes.php">Clientes</a></li>
                 <li><a href="agendamento.php">Agendamento</a></li>
+             <li><a href="historico_agendamentos.php">Histórico</a></li>
             </ul>
         </nav>
     </header>
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <section id="agendamento-form">
             <h2>Agende seu Horário</h2>
-            <p>Preencha as informações abaixo.</p>
+            <p>Porfavor preencha as informações abaixo.</p>
 
             <?php if (isset($mensagem)): ?>
                 <div class="mensagem-sucesso">
@@ -112,3 +112,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </footer>
 </body>
 </html>
+
