@@ -1,6 +1,6 @@
 <?php
 // --- Conexão com o Banco de Dados ---
-$servername = "127.0.0.1";
+$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "barbearia";
@@ -16,7 +16,7 @@ if (isset($_GET['acao']) && $_GET['acao'] == 'excluir' && isset($_GET['id'])) {
         $stmt->close();
         $conn_delete->close();
         // Redireciona para a mesma página sem os parâmetros GET para evitar re-exclusão ao recarregar
-        header("Location: historico_cadastros.php");
+        header("Location: clientes.php");
         exit();
     }
 }
@@ -43,24 +43,110 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Cadastros - Barbearia Elegance</title>
+    <title>Clientes - Barbearia Elegance</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos para a célula de ações */
+        .action-links {
+            display: flex;
+            gap: 8px; /* Espaço entre os botões */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo base para os botões de ação */
+        .action-links a {
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+        }
+
         /* Estilos para os botões de ação na tabela */
         .button-edit {
-            background-color: #e0a800; /* Amarelo mais escuro */
-            color: #212529; /* Cor de texto escura para contraste */
+            background-color: #ffc107; /* Amarelo */
+            color: #212529;
         }
         .button-edit:hover {
-            background-color: #c79500; /* Amarelo ainda mais escuro no hover */
+            background-color: #e0a800;
         }
         .button-delete {
-            background-color: #5a6268; /* Cinza mais escuro */
-            color: #fff;
+            background-color: #dc3545; /* Vermelho */
         }
         .button-delete:hover {
-            background-color: #495057; /* Cinza ainda mais escuro no hover */
+            background-color: #c82333;
+        }
+
+        /* Animação para o Modal */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-icon {
+            margin-bottom: 15px;
+        }
+
+
+        /* Estilos para o Modal de Confirmação */
+        .modal {
+            display: none; /* Oculto por padrão */
+            position: fixed; /* Fica sobre todo o conteúdo */
+            z-index: 2000; /* Garante que fique na frente */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7); /* Fundo preto semi-transparente */
+        }
+
+        .modal-content {
+            background-color: #1e1e1e; /* Cor de superfície do seu tema */
+            color: #e0e0e0; /* Cor de texto do seu tema */
+            margin: 15% auto;
+            padding: 30px;
+            border: 1px solid #2a2a2a;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .modal-content h3 {
+            color: #c5a47e; /* Cor secundária do tema */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Espaço entre os botões */
+            margin-top: 25px;
+        }
+        
+        .modal-actions a, .modal-actions button { 
+            cursor: pointer;
+            border: none;
+        }
+        /* Botão de cancelar mais sutil */
+        .button-cancel {
+            background-color: #4a4a4a; /* Cinza escuro neutro */
+        }
+        .button-cancel:hover {
+            background-color: #5a5a5a;
         }
     </style>
 </head>
@@ -72,15 +158,16 @@ $conn->close();
                 <li><a href="index.html">Início</a></li>
                 <li><a href="servicos.php">Serviços</a></li>
                 <li><a href="cadastro.php">Cadastro</a></li>
-                <li><a href="historico_cadastros.php">Histórico de Clientes</a></li>
+                <li><a href="clientes.php">Clientes</a></li>
                 <li><a href="agendamento.php">Agendamento</a></li>
+                <li><a href="historico_agendamentos.php">Histórico</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section id="historico">
-            <h2>Histórico de Cadastros</h2>
+            <h2>Clientes Cadastrados</h2>
 
             <?php if (!empty($mensagem_sucesso)): ?>
                 <div class="mensagem-sucesso" style="margin-bottom: 20px;">
@@ -110,13 +197,13 @@ $conn->close();
                                 <td><?= date("d/m/Y H:i:s", strtotime($row["data_cadastro"])) ?></td>
                                 <td class="action-links">
                                     <a href="editar_cadastro.php?id=<?= $row['id'] ?>" class="button-edit">Alterar</a>
-                                    <a href="historico_cadastros.php?acao=excluir&id=<?= $row['id'] ?>" class="button-delete" onclick="return confirm('Tem certeza que deseja excluir este cadastro?');">Excluir</a>
+                                    <a href="clientes.php?acao=excluir&id=<?= $row['id'] ?>" class="button-delete delete-link">Excluir</a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" style="text-align:center;">Nenhum cadastro encontrado.</td>
+                            <td colspan="6" style="text-align:center;">Nenhum cliente encontrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -124,8 +211,51 @@ $conn->close();
         </section>
     </main>
 
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <p style="font-size: 1.2em; margin-top: 10px;">Deseja excluir o seu cadastro?</p>
+            <div class="modal-actions">
+                <button id="cancelBtn" class="button-cancel action-links a">Não</button>
+                <a id="confirmBtn" href="#" class="button-delete">Sim</a>
+            </div>
+        </div>
+    </div>
     <footer>
         <p>&copy; 2025 Barbearia Elegance. Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('confirmModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const deleteLinks = document.querySelectorAll('.delete-link');
+
+        // Abre o modal quando qualquer link de exclusão é clicado
+        deleteLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault(); // Impede a navegação imediata
+                const deleteUrl = this.href; // Pega o URL de exclusão do link
+                confirmBtn.href = deleteUrl; // Define o URL no botão de confirmação do modal
+                modal.classList.add('show'); // Exibe o modal com animação
+            });
+        });
+
+        // Fecha o modal ao clicar em "Cancelar"
+        cancelBtn.addEventListener('click', function () {
+            modal.classList.remove('show');
+        });
+
+        // Fecha o modal se o usuário clicar fora da caixa de diálogo
+        window.addEventListener('click', function (event) {
+            if (event.target == modal) {
+                modal.classList.remove('show');
+            }
+        });
+    });
+    </script>
 </body>
 </html>
+</html>
+
