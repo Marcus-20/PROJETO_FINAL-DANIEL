@@ -56,6 +56,21 @@ $servicos = [
 <body>
 
 <section id="servicos">
+    <body>
+    <header>
+        <h1>Barbearia Elegance</h1>
+    
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="servicos.php">Serviços</a></li>
+                <li><a href="cadastro.php">Cadastro</a></li>
+                <li><a href="clientes.php">Clientes</a></li>
+                <li><a href="agendamento.php">Agendamento</a></li>
+             <li><a href="historico_agendamentos.php">Histórico</a></li>
+            </ul>
+        </nav>
+    </header>
     <h2>Nossos Serviços</h2>
 
     <div class="service-container">
@@ -82,10 +97,11 @@ $servicos = [
 
     <div class="call-to-action">
     <center>    
-    <a href="cadastro.php" class="button">Gostaria de solicitar um serviço?</a>
+    <a href="cadastro.php" class="button">Gostaria de fazer seu cadastro?</a>
     </center>
     </div>
 </section>
 
 </body>
 </html>
+
