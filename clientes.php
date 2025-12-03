@@ -111,23 +111,33 @@ $conn->close();
         }
 
         .modal-content {
-            background-color: #1e1e1e; /* Cor de superfície do seu tema */
-            color: #e0e0e0; /* Cor de texto do seu tema */
+            background-color: var(--surface-color);
+            color: var(--text-color);
             margin: 15% auto;
-            padding: 30px;
-            border: 1px solid #2a2a2a;
             width: 90%;
             max-width: 450px;
             border-radius: 8px;
-            text-align: center;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            overflow: hidden; /* Garante que o cabeçalho não ultrapasse o border-radius */
+            text-align: left; /* Alinha o texto à esquerda */
+        }
+
+        .modal-header {
+            background-color: var(--secondary-color);
+            padding: 15px 25px;
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 25px;
         }
 
         .modal-content h3 {
-            color: #c5a47e; /* Cor secundária do tema */
+            color: inherit; /* Herda a cor do modal-header */
             margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.5em;
+            margin-bottom: 0;
+            font-size: 1.3em;
+            font-weight: 600;
         }
 
         .modal-actions {
@@ -143,10 +153,10 @@ $conn->close();
         }
         /* Botão de cancelar mais sutil */
         .button-cancel {
-            background-color: #4a4a4a; /* Cinza escuro neutro */
+            background-color: #ffc107; /* Cinza escuro neutro */
         }
         .button-cancel:hover {
-            background-color: #5a5a5a;
+            background-color: #e0a800;
         }
     </style>
 </head>
@@ -214,10 +224,15 @@ $conn->close();
     <!-- Modal de Confirmação de Exclusão -->
     <div id="confirmModal" class="modal">
         <div class="modal-content">
-            <p style="font-size: 1.2em; margin-top: 10px;">Deseja excluir o seu cadastro?</p>
-            <div class="modal-actions">
-                <button id="cancelBtn" class="button-cancel action-links a">Não</button>
-                <a id="confirmBtn" href="#" class="button-delete">Sim</a>
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este cadastro? Esta ação não pode ser desfeita.</p>
+                <div class="modal-actions">
+                    <button id="cancelBtn" class="button-cancel action-links a">Cancelar</button>
+                    <a id="confirmBtn" href="#" class="button-delete">Sim, Excluir</a>
+                </div>
             </div>
         </div>
     </div>
