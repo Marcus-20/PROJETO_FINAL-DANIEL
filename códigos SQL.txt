@@ -1,4 +1,5 @@
-códigos SQL
+códigos SQL: para que o codigo do sql funcione você tera que colocar a versao do seu localhost
+e o nome do banco de dados como barbearia 
 
 CREATE TABLE cadastros (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -15,4 +16,5 @@ CREATE TABLE agendamentos (
     servico VARCHAR(255) NOT NULL,
     horario VARCHAR(20) NOT NULL,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+
 );
